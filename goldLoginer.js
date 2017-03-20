@@ -5,7 +5,7 @@ void function(){
     const username = 'your username';
     const password = 'your password';
 
-    document.querySelector('.login-button').click();
+    document.querySelector('.login').click();
 
     function processDom(selector,value,e){
         const u = document.querySelector(selector);
@@ -16,9 +16,9 @@ void function(){
     setTimeout(()=>{
         const e = new Event('input');        
 
-        processDom("[name=emailOrPhone]",username,e);
-        processDom("[name=password]",password,e);
+        processDom("[name=loginPhoneOrEmail]",username,e);
+        processDom("[name=loginPassword]",password,e);
 
-        document.querySelector(".welcome-large-btn").click();
+        document.querySelector(".panel>.btn").click();
     },200);    
 }();
