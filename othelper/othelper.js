@@ -7,12 +7,17 @@ void function(factory){
 }(function(){
 
     const delay = 500;
+    const otLen = 11;
     const localKey = 'otData';
 
     const page = {
         'getOtData':'W03030200',//考勤查询,
         'fillOtData':'zzcOT'//加班申请
     };
+
+    const url = {
+        'fillOtData':'/Workflow/form/New-zzcOT'
+    }
 
     const tbId = 'tbStaffDaily_tableData';//数据表格的id
 
@@ -48,6 +53,14 @@ void function(factory){
         return applyTd; //未申请的加班
     }
 
+    function checklength(arr){
+        if(arr.length > otLen){
+            alert(`你太勤奋了，加班已经达到${arr.length}次，但是我们试过，一次性提交太多会失败，建议一次提交${otLen}个，等这次审批完之后再提交`);
+            return arr.slice(0,11);
+        }
+        return arr;
+    }
+
     //获得加班时间，考勤页面主函数 
     function getOtData(){
         var usualOt = getOtTd('fnOT1');
@@ -72,6 +85,9 @@ void function(factory){
 
         var r = usualOtArr.concat(weekEndArr)   
 
+        //检查加班申请的长度
+        r = checklength(r);
+
         /*
             [{
                 DateFormat:'加班日期',
@@ -79,8 +95,10 @@ void function(factory){
                 GetRangeEndDate:'下班时间',
             }]
         */
+        //side effect
         localStorage.setItem(localKey,JSON.stringify(r));    
         alert('已成功获取加班数据');
+        location.assign(url['fillOtData']);
     }
 
     //填写加班申请，申请页主函数
@@ -126,6 +144,8 @@ void function(factory){
             await sleep(delay*6);
         }
 
+        //side effect
+        $('#loadingDiv').hide();
         localStorage.clear(localKey);
         alert('请检查后提交加班申请');
     }
