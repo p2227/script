@@ -1,10 +1,10 @@
-void function(factory){
+void function(jQuery,factory){
     try{
-        factory()
+        factory(jQuery)
     }catch(e){
         alert('当前浏览器不支持，建议升级到最新版本chrome');
     }
-}(function(){
+}(jQuery,function($){
 
     const delay = 500;
     const otLen = 11;
@@ -16,6 +16,7 @@ void function(factory){
     };
 
     const url = {
+        'getOtData':'/Attendance/StaffDaily/Edit?ParameterID=W03030200',
         'fillOtData':'/Workflow/form/New-zzcOT'
     }
 
@@ -41,8 +42,8 @@ void function(factory){
         return `td[data-bind*="${tdKey[type]}"]`;
     }
 
-    function getOtTd(type){
-        var td = $(`#${tbId} ${getTd(type)}:not(:empty)`); //加班
+    function getOtTd(type, $scope){
+        var td = $(`#${tbId} ${getTd(type)}:not(:empty)`,$scope); //加班
         var applyTd = [];
         td.each((idx,item)=>{
             var $item  = $(item);
@@ -62,10 +63,21 @@ void function(factory){
     }
 
     //获得加班时间，考勤页面主函数 
-    function getOtData(){
-        var usualOt = getOtTd('fnOT1');
-        var weekEndOt = getOtTd('fnOT2');
-        weekEndOt = weekEndOt.concat(getOtTd('fnOT3'));
+    function getOtData(otHtml){
+        var $otHtml;
+        var getOtTdInner;
+
+        if(otHtml){
+            $otHtml = $(otHtml.match());
+            getOtTdInner = type=>getOtTd(type,$otHtml);
+        }else{
+            getOtTdInner = getOtTd;
+        }
+
+
+        var usualOt = getOtTdInner('fnOT1');
+        var weekEndOt = getOtTdInner('fnOT2');
+        weekEndOt = weekEndOt.concat(getOtTdInner('fnOT3'));        
 
         var usualOtArr = usualOt.map($td=>{
             return {
@@ -96,9 +108,19 @@ void function(factory){
             }]
         */
         //side effect
-        localStorage.setItem(localKey,JSON.stringify(r));    
-        alert('已成功获取加班数据');
-        location.assign(url['fillOtData']);
+        if(otHtml){
+            return r;
+        }else{
+            localStorage.setItem(localKey,JSON.stringify(r));    
+            alert('已成功获取加班数据');
+            location.assign(url['fillOtData']);
+        }
+    }
+
+    function getOtDataAsync(){
+        return $.get(url.getOtData).then(resp=>{
+            return getOtData(resp)
+        })
     }
 
     //填写加班申请，申请页主函数
@@ -106,6 +128,10 @@ void function(factory){
         var data = localStorage.getItem(localKey);
         console.log(data);
         data = JSON.parse(data);
+
+        if(!data){
+            data = await getOtDataAsync();
+        }
 
         async function op(item,idx){
             var d = new Date(item.DateFormat);
