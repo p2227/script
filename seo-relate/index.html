@@ -1,23 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>Document</title>
+    <title>SEO页面组件关系</title>
     <style>
         ul{ padding:0; }
         ul>li{ list-style:  none; }
         table{  border-collapse: collapse; }
         .app-view{
             display: flex;
+            max-width: 940px;
+            margin:0 auto;
         }
         .left{      
-            flex:7;      
-            order: 1;
+            flex:7;    
         }
         .right{        
-            flex:3;   
-            order: 3;
+            flex:3;
+        }
+        .page-name {
+            position: sticky;
+            top: 0;
         }
         .active{
             background:#ccc;
@@ -443,5 +447,3 @@ const app = new Vue({
 })
 </script>
 </html>
-
-
