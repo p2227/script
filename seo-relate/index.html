@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Document</title>
+    <style>
+        ul{ padding:0; }
+        ul>li{ list-style:  none; }
+        table{  border-collapse: collapse; }
+        .app-view{
+            display: flex;
+        }
+        .left{      
+            flex:7;      
+            order: 1;
+        }
+        .right{        
+            flex:3;   
+            order: 3;
+        }
+        .active{
+            background:#ccc;
+        }
+
+        .comp-id, .comp-item{
+            cursor: pointer;
+            border:1px solid transparent;
+        }
+        .comp-hover{ 
+            border:1px solid blue
+        }
+        .comp-id:hover{
+            color:red;
+        }
+    </style>
+</head>
+<body>
+    <div id="app-view" class="app-view">
+        <div class="left">
+            <h2>页面文件名</h2>
+            <table class="page-name">
+                <tr v-for="p in page" :key="p.id" v-if="relate[p.id].note" v-bind:class="{ active: p.isActive }">
+                    <td>{{p.name}}</td>
+                    <td>{{relate[p.id].note}}</td>
+                    <td v-for="rp in relate[p.id].comp" :key="rp.id" @mouseover="pageHover(rp)" @mouseout="pageOut" class="comp-id">{{rp}}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="right">
+            <h2>组件名称</h2>
+            <ul class="comp-name">
+                <li v-for="c in comp" :key="c.id" v-if="c.name" v-bind:class="{ active: c.isActive, 'comp-hover':c.isHover }" @mouseover="compHover(c.id)" class="comp-item">{{c.id}} {{c.name}}</li>
+            </ul>
+        </div>
+    </div>
+</body>
+<script src="https://cdn.bootcss.com/vue/2.3.2/vue.min.js"></script>
+<script>
+const comp = [
+        {
+            id:1,
+            name: " airport /b",
+            isHover:false,
+            isActive: false
+        },
+        {
+            id:2,
+            name: "airport-details",
+            isHover:false,
+            isActive: false
+        },
+        {
+            id:3,
+            name: "car-rental-companies",
+            isHover:false,
+            isActive: false
+        },
+        {
+            id:4,
+            name: "",
+            isHover:false,
+            isActive: false
+        },
+        {
+            id:5,
+            name: " airport-brand /b",
+            isHover:false,
+            isActive: false
+        },
+        {
+            id:6,
+            name: "car-rental-airport-map",
+            isHover:false,
+            isActive: false
+        },
+        {
+            id:7,
+            name: "car-rental-companies-list",
+            isHover:false,
+            isActive: false
+        },
+        {
+            id:8,
+            name: "",
+            isHover:false,
+            isActive: false
+        },
+        {
+            id:9,
+            name: " city /b",
+            isHover:false,
+            isActive: false
+        },
+        {
+            id:10,
+            name: "car-rental-choices",
+            isHover:false,
+            isActive: false
+        },
+        {
+            id:11,
+            name: "popular-attraction",
+            isHover:false,
+            isActive: false
+        },
+        {
+            id:12,
+            name: "popular-destinations",
+            isHover:false,
+            isActive: false
+        },
+        {
+            id:13,
+            name: "",
+            isHover:false,
+            isActive: false
+        },
+        {
+            id:14,
+            name: " city-brand /b",
+            isHover:false,
+            isActive: false
+        },
+        {
+            id:15,
+            name: "car-rental-companies-list",
+            isHover:false,
+            isActive: false
+        },
+        {
+            id:16,
+            name: "",
+            isHover:false,
+            isActive: false
+        },
+        {
+            id:17,
+            name: " common /b",
+            isHover:false,
+            isActive: false
+        },
+        {
+            id:18,
+            name: "car-rental-choices",
+            isHover:false,
+            isActive: false
+        },
+        {
+            id:19,
+            name: "car-rental-companies-list",
+            isHover:false,
+            isActive: false
+        },
+        {
+            id:20,
+            name: "car-rental-locations-city",
+            isHover:false,
+            isActive: false
+        },
+        {
+            id:21,
+            name: "car-rental-locations-worldwide",
+            isHover:false,
+            isActive: false
+        },
+        {
+            id:22,
+            name: "popular-destinations",
+            isHover:false,
+            isActive: false
+        },
+        {
+            id:23,
+            name: "reviews-on-car-rental",
+            isHover:false,
+            isActive: false
+        },
+        {
+            id:24,
+            name: "style",
+            isHover:false,
+            isActive: false
+        },
+        {
+            id:25,
+            name: "",
+            isHover:false,
+            isActive: false
+        },
+        {
+            id:26,
+            name: " country /b",
+            isHover:false,
+            isActive: false
+        },
+        {
+            id:27,
+            name: "car-rental-companies-list",
+            isHover:false,
+            isActive: false
+        },
+        {
+            id:28,
+            name: "popular-destinations",
+            isHover:false,
+            isActive: false
+        },
+        {
+            id:29,
+            name: "",
+            isHover:false,
+            isActive: false
+        },
+        {
+            id:30,
+            name: " country-brand /b",
+            isHover:false,
+            isActive: false
+        },
+        {
+            id:31,
+            name: "car-rental-companies-list",
+            isHover:false,
+            isActive: false
+        },
+        {
+            id:32,
+            name: "popular-airports",
+            isHover:false,
+            isActive: false
+        },
+        {
+            id:33,
+            name: "popular-citys",
+            isHover:false,
+            isActive: false
+        },
+        {
+            id:34,
+            name: "",
+            isHover:false,
+            isActive: false
+        },
+        {
+            id:35,
+            name: " landmark /b",
+            isHover:false,
+            isActive: false
+        },
+        {
+            id:36,
+            name: "car-rental-locations-city",
+            isHover:false,
+            isActive: false
+        },
+        {
+            id:37,
+            name: "",
+            isHover:false,
+            isActive: false
+        },
+        {
+            id:38,
+            name: " landmark-brand /b",
+            isHover:false,
+            isActive: false
+        },
+        {
+            id:39,
+            name: "car-rental-airport-map",
+            isHover:false,
+            isActive: false
+        }
+    ]
+
+const page = [
+        {   
+            id:1,
+            name: "airport",
+            isActive: false
+        },
+        {   
+            id:2,
+            name: "airport-brand",
+            isActive: false
+        },
+        {   
+            id:3,
+            name: "all-airport",
+            isActive: false
+        },
+        {   
+            id:4,
+            name: "all-brand",
+            isActive: false
+        },
+        {   
+            id:5,
+            name: "all-city",
+            isActive: false
+        },
+        {   
+            id:6,
+            name: "all-city-country",
+            isActive: false
+        },
+        {   
+            id:7,
+            name: "all-country",
+            isActive: false
+        },
+        {   
+            id:8,
+            name: "all-state-country",
+            isActive: false
+        },
+        {   
+            id:9,
+            name: "city",
+            isActive: false
+        },
+        {   
+            id:10,
+            name: "city-brand",
+            isActive: false
+        },
+        {   
+            id:11,
+            name: "country",
+            isActive: false
+        },
+        {   
+            id:12,
+            name: "country-brand",
+            isActive: false
+        },
+        {   
+            id:13,
+            name: "index",
+            isActive: false
+        },
+        {   
+            id:14,
+            name: "landmark",
+            isActive: false
+        },
+        {   
+            id:15,
+            name: "landmark-brand",
+            isActive: false
+        }
+    ]
+
+const relate = {
+    1: {
+        note: '机场',
+        comp: [2, 3, 23, 18, 22]
+    }, 2: {
+        note: '机场租车公司',
+        comp: [6, 7, 23, 18, 21]
+    }, 3: {
+        note: '所有机场',
+        comp: []
+    }, 4: {
+        note: '',
+        comp: []
+    }, 5: {
+        note: '所有城市',
+        comp: []
+    }, 6: {
+        note: '国家下面的城市，州下面的城市两页面共用',
+        comp: []
+    }, 7: {
+        note: '所有国家',
+        comp: []
+    }, 8: {
+        note: '所有州',
+        comp: []
+    }, 9: {
+        note: '城市页',
+        comp: [11, 12, 18, 19]
+    }, 10: {
+        note: '城市租车公司',
+        comp: [20, 18, 23, 19, 21]
+    }, 11: {
+        note: '国家页',
+        comp: [12, 23, 19 ]
+    }, 12: {
+        note: '国家租车公司',
+        comp: [32, 33, 23, 19, 21]
+    }, 13: {
+        note: '首页',
+        comp: []
+    }, 14: {
+        note: '地标页',
+        comp: [20, 23, 18, 22]
+    }, 15: {
+        note: '地标租车公司页',
+        comp: [39, 18, 20, 22]
+    }
+}
+
+const app = new Vue({
+  el: '#app-view',
+  data: {
+    comp,
+    page,
+    relate,
+  },
+  methods:{
+    pageHover(compId){
+        comp.forEach(c=>c.isActive = (c.id === compId));
+    },
+    pageOut(){
+        comp.find(c=>c.isActive).isActive = false;
+    },
+    compHover(compId){
+        comp.forEach(c=>c.isHover = (c.id === compId));
+        page.forEach((p)=>p.isActive = relate[p.id].comp.indexOf(compId) > -1);
+    }
+  }
+})
+</script>
+</html>
+
+
