@@ -83,7 +83,7 @@ void function(factory){
             }
         })
 
-        var r = usualOtArr.concat(weekEndArr)   
+        var r = usualOtArr;//周末要工资就不要加班工时了
 
         //检查加班申请的长度
         r = checklength(r);
