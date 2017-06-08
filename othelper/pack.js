@@ -1,26 +1,23 @@
 var fs = require('fs');
 var fileName = 'othelper.min.js';
 
-var UglifyJS = require("uglify-js");
+const sourceCode = fs.readFileSync('./othelper.js').toString();
+const butternut = require('butternut');
+const { code, map } = butternut.squash(sourceCode);
 
-// var result = UglifyJS.minify("src/index.js");
-// fs.writeFileSync('dist/ophelper.min.js',result.code);
 
-// uglify 暂时不支持 async await 
-fs.createReadStream('othelper.js').pipe(fs.createWriteStream(fileName));
+fs.writeFileSync(`./${fileName}`,code);
 
 var url = `http://gh.p2227.com/script/othelper/${fileName}`;
 
-var result = UglifyJS.minify(`
+var result = butternut.squash(`
     (function(d){
         var elem = d.createElement('script');
         elem.src = '${url}?'+Math.random().toString(36).slice(4,7);
         elem.async = true;
         d.head.appendChild(elem);
     })(document);
-`,{
-    fromString:true
-});
+`);
 
 
 var fav = fs.readFileSync('index.tpl.html',{ encoding: 'utf8' }).replace(/{{script}}/,result.code);

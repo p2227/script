@@ -15,6 +15,6 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "uglify-js": "^2.8.22"
+    "butternut": "^0.4.6"
   }
 }

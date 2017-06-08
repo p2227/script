@@ -6,7 +6,7 @@ void (function (factory) {
     }
 })(function () {
 
-    const __DEV__ = localStorage.getItem('__DEV__');
+    const __DEV__ = localStorage.getItem('__DEV__') === '1';
     const delay = 500;
     const otLen = 11;
     const localKey = 'otData';
@@ -63,9 +63,6 @@ void (function (factory) {
         if (arr.length > otLen) {
             alert(`你太勤奋了，加班已经达到${arr.length}次，但是我们试过，一次性提交太多会失败，建议一次提交${otLen}个，等这次审批完之后再提交`);
             return arr.slice(0, 11);
-        } else if (arr.length <= 0) {
-            alert(`没检测到你的加班信息，是不是要查询上一个月加班？`);
-            $('#dvStartDate,#dvEndDate').css({ 'border-color': 'red' });
         }
         return arr;
     }
@@ -130,6 +127,9 @@ void (function (factory) {
             localStorage.setItem(localKey, JSON.stringify(r));
             alert('已成功获取加班数据');
             __DEV__ || location.assign(url['fillOtData']);
+        } else {
+            alert(`没检测到你的加班信息，是不是要查询上一个月加班？`);
+            $('#dvStartDate,#dvEndDate').css({ 'border-color': 'red' });
         }
     }
 
@@ -202,14 +202,14 @@ void (function (factory) {
 
         //side effect
         $('#loadingDiv').hide();
-        $(tuple['SwitchType']).css('border-color', 'red').removeAttr('disabled', '');
         __DEV__ || localStorage.clear(localKey);
 
+        await sleep(delay);
+        alert('请检查后提交加班申请'); 
         if ($('#hlp-tips').length === 0) {
             $('.navbar.navbar-fixed-top').append(`<span id="hlp-tips" style="color:red">周末加班要不要填写，是调休还是加班费，请联系您的主管确认</span>`)
         }
-        await sleep(0);
-        alert('请检查后提交加班申请');
+        $(tuple['SwitchType']).css('border-color', 'red').removeAttr('disabled', '');
     }
 
     //begin
@@ -219,5 +219,4 @@ void (function (factory) {
     } else {
         fillOtData();
     }
-
 })
