@@ -20,7 +20,7 @@ void (function (factory) {
         'fillOtData': '/Workflow/form/New-zzcOT'
     }
 
-    const tbId = 'dvStaffDaily';//数据表格的id
+    const tbId = 'tbStaffDaily_tableData';//数据表格的id
 
     const tdKey = {
         'fnOT1': 'fnOT1', //平时加班
