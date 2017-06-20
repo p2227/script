@@ -1,8 +1,15 @@
-var fs = require('fs');
+const fs = require('fs');
 const butternut = require('butternut');
+let fsConf = { encoding: 'utf8' };
 
-var result = butternut.squash(fs.readFileSync('./index.js',{ encoding: 'utf8' }));
+let tuple = [{file:'./index.js', tmpl: /{{script}}/},{file:'./gitlab.js', tmpl: /{{gitlab}}/}]
+let fav = fs.readFileSync('index.tpl.html',fsConf);
 
+tuple.forEach(item=>{
+    fav = fav.replace(item.tmpl,function(){
+        let result = butternut.squash(fs.readFileSync(item.file, fsConf));
+        return result.code;
+    });
+})
 
-var fav = fs.readFileSync('index.tpl.html',{ encoding: 'utf8' }).replace(/{{script}}/,result.code);
 fs.writeFileSync('index.html',fav);
