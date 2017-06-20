@@ -7,7 +7,9 @@
     <title>复制粘贴列表</title>
 </head>
 <body>
-    <a href="javascript:!function(e){let n=e.querySelector('.heading'),t=e.createElement('input');e.body.appendChild(t);t.value=`fixed #${n.innerText}`;t.select();var c=e.execCommand('copy',!0);console.log(c);t.remove(t)}(document)">复制禅道的标题</a>
-    <a href="javascript:!function(t){let e=$('#commits-list .commit'),m=[];e.each((t,e)=>{let i=$('.item-title',e).text();if(i.match(/^Merge branch/)){return }let a=$('.commit-author-link',e).text();a==='despair'&&(a='强哥');if(a==='hm'){return }m.push({title:i,auther:a})});var i=m.map(t=>`${t.title} -- ${t.auther}\n`).join(''),a=t.createElement('textarea');a.value=i;t.body.appendChild(a);a.select();t.execCommand('copy');a.remove(a)}(document)">复制gitlab上车信息</a>
+    <ol>
+        <li><a href="javascript:!function(e){let n=e.querySelector('.heading'),t=e.createElement('input');e.body.appendChild(t);t.value=`fixed #${n.innerText}`;t.select();var c=e.execCommand('copy',!0);console.log(c);t.remove(t)}(document)">复制禅道的标题</a></li>
+        <li><a href="javascript:!function(t){let e=$('#commits-list .commit'),m=[];e.each((t,e)=>{let i=$('.item-title',e).text();if(i.match(/^Merge branch/)){return }let a=$('.commit-author-link',e).text();a==='despair'&&(a='强哥');if(a==='hm'){return }m.push({title:i,auther:a})});var i=m.map(t=>`${t.title} -- ${t.auther}\n`).join(''),a=t.createElement('textarea');a.value=i;t.body.appendChild(a);a.select();t.execCommand('copy');a.remove(a)}(document)">复制gitlab上车信息</a></li>
+    </ol>
 </body>
 </html>
