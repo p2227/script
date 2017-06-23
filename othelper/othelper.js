@@ -172,7 +172,7 @@ void (function (factory) {
             await sleep(delay);
 
             let GetRangeEndDateNum = +item.GetRangeEndDate.slice(0, 2);
-            if (GetRangeEndDateNum < 21) { //加班到次日
+            if (item.type === 'fnOT1' && GetRangeEndDateNum < 21) { //工作日 加班到次日
                 $(`#dvEnd${idx}display`).siblings('.k-dropdown').click();
                 await sleep(0);
                 $(`.k-animation-container #dvEnd${idx}popup_listbox`).last().find('li:eq(1)').click();
