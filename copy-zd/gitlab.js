@@ -3,7 +3,7 @@
     let r = [];
     list.each((key,item)=>{
         let title = $('.item-title',item).text();
-        if (['打包', 'ignore', 'Merge branch'].indexOf(title) > -1) {
+        if (/打包|ignore|Merge branch/.test(title)) {
             return ;
         }
         let auther = $('.commit-author-link',item).text();
