@@ -16,7 +16,7 @@
         r.push({title,auther});
     });
 
-    var str = r.map(item=>`${item.title} -- ${item.auther}\n`).join('');
+    var str = r.map(item=>`${item.title} -- ${item.auther}\n`).reverse().join('');
 
     var t = d.createElement('textarea');
     t.value = str;

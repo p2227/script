@@ -2,7 +2,7 @@
     let h = d.querySelector('.heading');
     let i = d.createElement('input');
     d.body.appendChild(i);
-    i.value = `fixed #${h.innerText}`;
+    i.value = `bugfix -- #${h.innerText}`;
     i.select();
     var r = d.execCommand('copy',true);
     console.log(r);
