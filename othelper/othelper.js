@@ -20,7 +20,7 @@ void (function (factory) {
         'fillOtData': '/Workflow/form/New-zzcOT'
     }
 
-    const tbId = 'tbStaffDaily_tableData';//数据表格的id
+    const tbId = 'tbStaffDaily';//数据表格的id
 
     const tdKey = {
         'fnOT1': 'fnOT1', //平时加班
@@ -110,7 +110,7 @@ void (function (factory) {
             }
         })
 
-        var r = usualOtArr.concat(weekEndArr);
+        var r = usualOtArr//.concat(weekEndArr); //20171126不填写周末加班了。
 
         //检查加班申请的长度
         r = checklength(r);
@@ -171,13 +171,17 @@ void (function (factory) {
             $(`#dvEnd${idx}display`).val(item.GetRangeEndDate).trigger('blur');
             await sleep(delay);
 
+            //是否有吃饭时间
+            $(`select.form-controlText[data-bind*=OTMealMinutes]`).val(0).trigger('change');
+            await sleep(delay);
+
             let GetRangeEndDateNum = +item.GetRangeEndDate.slice(0, 2);
             if (item.type === 'fnOT1' && GetRangeEndDateNum < 21) { //工作日 加班到次日
                 $(`#dvEnd${idx}display`).siblings('.k-dropdown').click();
                 await sleep(0);
                 $(`.k-animation-container #dvEnd${idx}popup_listbox`).last().find('li:eq(1)').click();
+                await sleep(delay);
             }
-            await sleep(delay);
             //加班转换[调休/工资]
             // if(item.type !== 'fnOT1'){
             //     $(`#dvEnd${idx}display`).closest('tr').find(tuple['SwitchType']).attr('disabled','').val(0).trigger('change');
