@@ -7,7 +7,7 @@ void (function (factory) {
 })(function () {
 
     const __DEV__ = localStorage.getItem('__DEV__') === '1';
-    const delay = 500;
+    const delay = location.hostname === 'gzehr.zuzuche.cn' ? 850 : 650;
     const otLen = 11;
     const localKey = 'otData';
 
@@ -138,10 +138,14 @@ void (function (factory) {
         __DEV__ && ($('[data-bind*="$root.Delete"]:gt(0)').click(), await sleep(delay))
 
         var data = localStorage.getItem(localKey);
-        console.log(data);
+        __DEV__ && console.log(data);
         data = JSON.parse(data);
 
         async function op(item, idx) {
+            //是否有吃饭时间
+            $(`select.form-controlText[data-bind*=OTMealMinutes]`).val(0).trigger('change');
+            await sleep(delay);
+            
             //填写日期
             var d = new Date(item.DateFormat);
             var dataInput = $(`#Date${idx}`).val(item.DateFormat).trigger('blur').trigger('click');
@@ -169,10 +173,6 @@ void (function (factory) {
 
             //加班结束时间
             $(`#dvEnd${idx}display`).val(item.GetRangeEndDate).trigger('blur');
-            await sleep(delay);
-
-            //是否有吃饭时间
-            $(`select.form-controlText[data-bind*=OTMealMinutes]`).val(0).trigger('change');
             await sleep(delay);
 
             let GetRangeEndDateNum = +item.GetRangeEndDate.slice(0, 2);
@@ -206,13 +206,11 @@ void (function (factory) {
 
         //side effect
         $('#loadingDiv').hide();
-        __DEV__ || localStorage.clear(localKey);
+        __DEV__ || localStorage.removeItem(localKey);
 
         await sleep(delay);
-        alert('请检查后提交加班申请'); 
-        if ($('#hlp-tips').length === 0) {
-            $('.navbar.navbar-fixed-top').append(`<span id="hlp-tips" style="color:red">周末加班要不要填写，是调休还是加班费，请联系您的主管确认</span>`)
-        }
+        $('#hlp-tips').remove();
+        $('.navbar-fixed-top').append(`<span id="hlp-tips" style="color:red;position: relative;left: -400px;">1.请检查后提交，尤其是吃饭时间。 2.str_StartEndTimeRequired 是因为网速太慢，以至于吃饭时间选择不了 3.加班助手网址已经迁移到<a target="_blank" href="//sp.easyrentcars.com/othelper/index.html">这里</a>了，支付内外网填写，赶紧升级吧。</span>`);
         $(tuple['SwitchType']).css('border-color', 'red').removeAttr('disabled', '');
     }
 
@@ -221,6 +219,7 @@ void (function (factory) {
     if (href.indexOf(page.getOtData) > 0) {
         getOtData();
     } else {
+        // __DEV__ && eval(window.ChangeTime.toString().replace(/\bdebugger;/g,''));
         fillOtData();
     }
 })
